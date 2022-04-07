@@ -27,8 +27,8 @@ class MainServiceImplTest {
         Url url1 = new Url();
         url1.setOriginUrl("original");
         for(int i=0; i<20; i++){
-            Url resultUrl = mainService.create(url1);
-            System.out.println(resultUrl.getShortenUrl());
+            mainService.createShortenUrl(url1);
+            System.out.println(url1.getShortenUrl());
         }
     }
 }
