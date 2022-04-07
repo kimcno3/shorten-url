@@ -27,13 +27,17 @@ public class AccessController {
     */
 
     @GetMapping("/{shortenUrl}")
-//    @ResponseBody
+    @ResponseBody
     public String accessShortenUrl(@PathVariable ShortenUrl shortenUrl,
                                    RedirectAttributes redirectAttributes){
 
         log.info("shorten = {}", shortenUrl.getShortenUrl());
+
         Url url = mainService.findOriginUrl(shortenUrl);
         redirectAttributes.addAttribute("originUrl", url.getOriginUrl());
+
+        log.info("origin = {}", url.getOriginUrl());
+
         return "redirect:{originUrl}";
      }
 }
