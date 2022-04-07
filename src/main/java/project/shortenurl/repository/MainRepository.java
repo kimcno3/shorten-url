@@ -7,7 +7,7 @@ import project.shortenurl.domain.Url;
 public interface MainRepository {
 
     Long save(Url url);
-    boolean isSameUrl(OriginUrl originUrl);
+    boolean isSameUrl(Url url);
     ShortenUrl findById(Long id);
-    ShortenUrl findByOriginUrl(OriginUrl originUrl);
+    ShortenUrl findByOriginUrl(Url url);
 }

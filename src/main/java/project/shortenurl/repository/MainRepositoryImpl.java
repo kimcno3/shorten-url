@@ -28,7 +28,7 @@ public class MainRepositoryImpl implements MainRepository {
     }
 
     @Override
-    public boolean isSameUrl(OriginUrl originUrl) {
+    public boolean isSameUrl(Url url) {
         return false;
     }
 
@@ -38,7 +38,7 @@ public class MainRepositoryImpl implements MainRepository {
     }
 
     @Override
-    public ShortenUrl findByOriginUrl(OriginUrl originUrl) {
+    public ShortenUrl findByOriginUrl(Url url) {
         return null;
     }
 }
