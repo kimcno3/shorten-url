@@ -15,7 +15,7 @@ import project.shortenurl.domain.OriginUrlDTO;
 import project.shortenurl.domain.ShortenUrlDTO;
 import project.shortenurl.service.MainService;
 
-//@Slf4j
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -40,6 +40,7 @@ public class MainController {
      * shorten url로 접근한 횟수를 저장하고 볼 수 있게 하려면 어떤 부분을 수정하면 될지
             * Model 객체를 DB에 저장 전, Repository 에서 "AccessCount" 변수를 생성 및 저장
             * 저장된 URL에 접근하는 요청이 오면 해당되는 Url이 저장된 Model 객체를 DB에서 찾고 count 1 증가
+            * 대신 형변환 필요...
             *
      * memory가 아닌 database로 저장할 경우 코드의 수정 범위를 최소화 하려면 어떤 설계가 되는게 좋을지
         *
@@ -79,6 +80,12 @@ public class MainController {
         String originUrl = basicUrl + findModel.getAttribute("originUrl");
 
         redirectAttributes.addAttribute("originUrl", originUrl);
+
+        log.info("Controller info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                findModel.getAttribute("id"),
+                findModel.getAttribute("originUrl"),
+                findModel.getAttribute("shortenUrl"),
+                findModel.getAttribute("accessCount"));
 
         return "redirect:{originUrl}";
     }
