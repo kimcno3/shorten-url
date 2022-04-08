@@ -1,12 +1,11 @@
 package project.shortenurl.service;
 
-import project.shortenurl.domain.OriginUrl;
-import project.shortenurl.domain.ShortenUrl;
-import project.shortenurl.domain.Url;
+import org.springframework.ui.Model;
 
 public interface MainService {
     boolean isExist();
-    Long join(Url url); // id받아서 create에서 사용
-    void createShortenUrl(Url url);
-    Url findOriginUrl(ShortenUrl shortenUrl);
+    Model create(Model model);
+    void createShortenUrl(Model model);
+    String makeRandomUrl();
+    Model findOriginUrl(Model model);
 }

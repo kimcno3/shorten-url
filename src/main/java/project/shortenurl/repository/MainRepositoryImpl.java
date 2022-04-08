@@ -1,16 +1,12 @@
 package project.shortenurl.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import project.shortenurl.domain.OriginUrl;
-import project.shortenurl.domain.ShortenUrl;
-import project.shortenurl.domain.Url;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.springframework.ui.Model;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MainRepositoryImpl implements MainRepository {
@@ -23,36 +19,44 @@ public class MainRepositoryImpl implements MainRepository {
     *
     */
 
-
-
-    private ConcurrentHashMap<Long, Url> database = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Long, Model> database = new ConcurrentHashMap<>();
     private Long sequence = 0L;
 
     @Override
-    public boolean isSameUrl(Url url) {
+    public boolean isSameUrl() {
         return false;
     }
 
     @Override
-    public Long save(Url url) {
-        url.setId(++sequence);
-        database.put(url.getId(), url);
-        return url.getId();
+    public Model save(Model model) {
+        model.addAttribute("id", ++sequence);
+        model.addAttribute("accessCount", 0);
+        Long currentId = (Long) model.getAttribute("id");
+
+        return database.put(currentId, model);
     }
 
     @Override
-    public Url findByShortenUrl(ShortenUrl shortenUrl) {
-        String shortenUrlString = shortenUrl.getShortenUrl();
-        for(Url tempUrl : database.values()){
-            if(tempUrl.getShortenUrl().equals(shortenUrlString)){
-                return tempUrl;
+    public Model findByShortenUrl(Model model) {
+        log.info("repository param model shortenUrl = {}", model.getAttribute("shortenUrl"));
+
+        for (Model tempModel: database.values()) {
+            if(tempModel.getAttribute("shortenUrl").equals(model.getAttribute("shortenUrl"))){
+                tempModel.addAttribute("accessCount", (int)tempModel.getAttribute("accessCount")+1);
+
+                log.info("repository's tempModel info : originUrl = {}, shortenUrl = {}, accessCount = {}",
+                        tempModel.getAttribute("originUrl"),
+                        tempModel.getAttribute("shortenUrl"),
+                        tempModel.getAttribute("accessCount"));
+
+                return tempModel;
             }
         }
         return null;
     }
 
     @Override
-    public Url findById(Long id) {
+    public Model findById(Long id) {
         return database.get(id);
     }
 }

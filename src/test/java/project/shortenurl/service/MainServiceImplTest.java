@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import project.shortenurl.MainConfig;
-import project.shortenurl.domain.Url;
 import project.shortenurl.repository.MainRepository;
 import project.shortenurl.repository.MainRepositoryImpl;
 
@@ -24,11 +23,7 @@ class MainServiceImplTest {
     @Test
     void create() {
         MainService mainService = ac.getBean("mainServiceImpl", MainService.class);
-        Url url1 = new Url();
-        url1.setOriginUrl("original");
         for(int i=0; i<20; i++){
-            mainService.createShortenUrl(url1);
-            System.out.println(url1.getShortenUrl());
         }
     }
 }

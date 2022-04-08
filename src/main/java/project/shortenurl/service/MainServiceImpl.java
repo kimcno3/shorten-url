@@ -2,12 +2,8 @@ package project.shortenurl.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import project.shortenurl.domain.OriginUrl;
-import project.shortenurl.domain.ShortenUrl;
-import project.shortenurl.domain.Url;
+import org.springframework.ui.Model;
 import project.shortenurl.repository.MainRepository;
 import java.util.Locale;
 
@@ -31,17 +27,17 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-   public Long join(Url url) {
-        createShortenUrl(url);
-        Long id = mainRepository.save(url);
-        return id;
+   public Model create(Model model) {
+        createShortenUrl(model);
+        return mainRepository.save(model);
     }
 
     @Override
-    public void createShortenUrl(Url url) {
-        url.setShortenUrl(makeRandomUrl());
+    public void createShortenUrl(Model model) {
+        model.addAttribute("shortenUrl", makeRandomUrl());
     }
 
+    @Override
     public String makeRandomUrl(){
         return RandomStringUtils
                 .random(12,0,'Z', true,true)
@@ -49,7 +45,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public Url findOriginUrl(ShortenUrl shortenUrl) {
-        return mainRepository.findByShortenUrl(shortenUrl);
+    public Model findOriginUrl(Model model) {
+        return mainRepository.findByShortenUrl(model);
     }
 }
