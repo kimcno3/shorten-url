@@ -38,16 +38,9 @@ public class MainRepositoryImpl implements MainRepository {
 
     @Override
     public Model findByShortenUrl(Model model) {
-        log.info("repository param model shortenUrl = {}", model.getAttribute("shortenUrl"));
-
         for (Model tempModel: database.values()) {
             if(tempModel.getAttribute("shortenUrl").equals(model.getAttribute("shortenUrl"))){
                 tempModel.addAttribute("accessCount", (int)tempModel.getAttribute("accessCount")+1);
-
-                log.info("repository's tempModel info : originUrl = {}, shortenUrl = {}, accessCount = {}",
-                        tempModel.getAttribute("originUrl"),
-                        tempModel.getAttribute("shortenUrl"),
-                        tempModel.getAttribute("accessCount"));
 
                 return tempModel;
             }
