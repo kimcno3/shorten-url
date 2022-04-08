@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.shortenurl.domain.ErrorMessage;
 import project.shortenurl.domain.OriginUrlDTO;
 import project.shortenurl.domain.ShortenUrlDTO;
 import project.shortenurl.service.MainService;
@@ -54,18 +55,24 @@ public class MainController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<ShortenUrlDTO> createShortenUrl(@RequestBody OriginUrlDTO originUrlDTO, Model model){
-        if(true){
-            model.addAttribute("originUrl", originUrlDTO.getOriginUrl());
+    public ResponseEntity<?> createShortenUrl(@RequestBody OriginUrlDTO originUrlDTO, Model model){
+
+        String originUrl = originUrlDTO.getOriginUrl();
+        model.addAttribute("originUrl", originUrl);
+
+        if(mainService.isNotExist(originUrl)){
+
             mainService.create(model);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new ShortenUrlDTO(basicUrl + model.getAttribute("shortenUrl")));
         } else{
+            String shortenUrl = basicUrl + mainService.findShortenUrl(model);
+
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ShortenUrlDTO("Invalid Url Type"));
+                    .body(new ErrorMessage("This URL is already having shorten Url : " + shortenUrl));
         }
     }
 
@@ -75,17 +82,8 @@ public class MainController {
                                    @NotNull RedirectAttributes redirectAttributes){
 
         model.addAttribute("shortenUrl", shortenUrl);
-
-        Model findModel = mainService.findOriginUrl(model);
-        String originUrl = basicUrl + findModel.getAttribute("originUrl");
-
+        String originUrl = basicUrl + mainService.findOriginUrl(model);
         redirectAttributes.addAttribute("originUrl", originUrl);
-
-        log.info("Controller info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
-                findModel.getAttribute("id"),
-                findModel.getAttribute("originUrl"),
-                findModel.getAttribute("shortenUrl"),
-                findModel.getAttribute("accessCount"));
 
         return "redirect:{originUrl}";
     }

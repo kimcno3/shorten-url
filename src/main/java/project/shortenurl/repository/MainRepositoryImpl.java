@@ -11,45 +11,80 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class MainRepositoryImpl implements MainRepository {
 
-    /*
-    * 개선 사항
-        * findByShortenUrl의 코드를 더 작게 나눠볼 수 없을지
-        * 위 메서드의 로직을 Mainservice로 뺄 수는 없을지
-        *
-    *
-    */
-
-    private ConcurrentHashMap<Long, Model> database = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, Model> database = new ConcurrentHashMap<>();
     private Long sequence = 0L;
 
     @Override
-    public boolean isSameUrl() {
-        return false;
+    public boolean isSameUrl(String originUrl) {
+        if(database.size() == 0) return true;
+
+        for (Model tempModel: database.values()) {
+            String tempOriginUrl = (String) tempModel.getAttribute("originUrl");
+
+            if (tempOriginUrl.equals(originUrl)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public Model save(Model model) {
+
         model.addAttribute("id", ++sequence);
         model.addAttribute("accessCount", 0);
-        Long currentId = (Long) model.getAttribute("id");
 
+        Long currentId = (Long) model.getAttribute("id");
         return database.put(currentId, model);
     }
 
     @Override
-    public Model findByShortenUrl(Model model) {
-        for (Model tempModel: database.values()) {
-            if(tempModel.getAttribute("shortenUrl").equals(model.getAttribute("shortenUrl"))){
-                tempModel.addAttribute("accessCount", (int)tempModel.getAttribute("accessCount")+1);
+    public String findByOriginUrl(Model model){
+        Object requestOriginUrl = model.getAttribute("originUrl");
 
-                return tempModel;
+        for (Model tempModel : database.values()) {
+            Object tempOriginUrl = tempModel.getAttribute("originUrl");
+
+            if(requestOriginUrl.equals(tempOriginUrl)){
+
+                log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                        tempModel.getAttribute("id"),
+                        tempModel.getAttribute("originUrl"),
+                        tempModel.getAttribute("shortenUrl"),
+                        tempModel.getAttribute("accessCount"));
+
+                return (String) tempModel.getAttribute("shortenUrl");
             }
         }
         return null;
     }
 
     @Override
-    public Model findById(Long id) {
-        return database.get(id);
+    public String findByShortenUrl(Model model) {
+
+        Object requestShortUrl = model.getAttribute("shortenUrl");
+
+        for (Model tempModel : database.values()) {
+            Object tempShortUrl = tempModel.getAttribute("shortenUrl");
+
+            if(requestShortUrl.equals(tempShortUrl)){
+                tempModel.addAttribute("accessCount", plusAccessCount(tempModel));
+
+                log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                        tempModel.getAttribute("id"),
+                        tempModel.getAttribute("originUrl"),
+                        tempModel.getAttribute("shortenUrl"),
+                        tempModel.getAttribute("accessCount"));
+
+                return (String) tempModel.getAttribute("originUrl");
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int plusAccessCount(Model tempModel){
+        return (int) tempModel.getAttribute("accessCount") + 1;
     }
 }
+

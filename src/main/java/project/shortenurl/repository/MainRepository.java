@@ -4,8 +4,9 @@ import org.springframework.ui.Model;
 
 public interface MainRepository {
 
-    boolean isSameUrl();
+    boolean isSameUrl(String originUrl);
     Model save(Model model);
-    Model findByShortenUrl(Model model);
-    Model findById(Long id);
+    String findByOriginUrl(Model model);
+    String findByShortenUrl(Model model);
+    int plusAccessCount(Model tempModel);
 }

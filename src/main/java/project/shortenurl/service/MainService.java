@@ -3,9 +3,10 @@ package project.shortenurl.service;
 import org.springframework.ui.Model;
 
 public interface MainService {
-    boolean isExist();
+    boolean isNotExist(String origin);
     Model create(Model model);
     void createShortenUrl(Model model);
     String makeRandomUrl();
-    Model findOriginUrl(Model model);
+    String findOriginUrl(Model model);
+    String findShortenUrl(Model model);
 }

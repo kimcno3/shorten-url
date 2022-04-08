@@ -22,8 +22,8 @@ public class MainServiceImpl implements MainService {
     * */
 
     @Override
-    public boolean isExist() {
-        return false;
+    public boolean isNotExist(String originUrl) {
+        return mainRepository.isSameUrl(originUrl);
     }
 
     @Override
@@ -45,7 +45,12 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public Model findOriginUrl(Model model) {
+    public String findOriginUrl(Model model) {
         return mainRepository.findByShortenUrl(model);
+    }
+
+    @Override
+    public String findShortenUrl(Model model) {
+        return mainRepository.findByOriginUrl(model);
     }
 }
