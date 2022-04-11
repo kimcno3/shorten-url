@@ -4,12 +4,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.ui.Model;
 import project.shortenurl.MainConfig;
-import project.shortenurl.domain.ShortenUrlDTO;
 
 
-class MainRepositoryImplTest {
+class UrlRepositoryImplTest {
     ApplicationContext ac = new AnnotationConfigApplicationContext(MainConfig.class);
 
 
@@ -22,10 +20,10 @@ class MainRepositoryImplTest {
 
     @Test
     void acSample() {
-        MainRepository mainRepository1 = ac.getBean(MainRepositoryImpl.class);
-        MainRepository mainRepository2 = ac.getBean(MainRepositoryImpl.class);
+        UrlRepository urlRepository1 = ac.getBean(HashMapUrlRepository.class);
+        UrlRepository urlRepository2 = ac.getBean(HashMapUrlRepository.class);
 
-        Assertions.assertThat(mainRepository2).isEqualTo(mainRepository1);
+        Assertions.assertThat(urlRepository2).isEqualTo(urlRepository1);
     }
 
     @Test

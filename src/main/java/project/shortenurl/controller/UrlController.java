@@ -10,16 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.shortenurl.domain.ErrorMessage;
 import project.shortenurl.domain.OriginUrlDTO;
 import project.shortenurl.domain.ShortenUrlDTO;
-import project.shortenurl.service.MainService;
+import project.shortenurl.service.UrlService;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class MainController {
+public class UrlController {
 
     /*
      * 추가 개선 사항
@@ -48,7 +47,7 @@ public class MainController {
         *
      */
 
-    private final MainService mainService;
+    private final UrlService urlService;
 
     @Value("${basicUrl}")
     private String basicUrl;
@@ -60,15 +59,15 @@ public class MainController {
         String originUrl = originUrlDTO.getOriginUrl();
         model.addAttribute("originUrl", originUrl);
 
-        if(mainService.isNotExist(originUrl)){
+        if(urlService.isNotExist(originUrl)){
 
-            mainService.create(model);
+            urlService.create(model);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new ShortenUrlDTO(basicUrl + model.getAttribute("shortenUrl")));
         } else{
-            String shortenUrl = basicUrl + mainService.findShortenUrl(model);
+            String shortenUrl = basicUrl + urlService.findShortenUrl(model);
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -78,13 +77,10 @@ public class MainController {
 
     @GetMapping("/{shortenUrl}")
     public String accessShortenUrl(@PathVariable String shortenUrl,
-                                   @NotNull Model model,
-                                   @NotNull RedirectAttributes redirectAttributes){
+                                   @NotNull Model model){
 
         model.addAttribute("shortenUrl", shortenUrl);
-        String originUrl = basicUrl + mainService.findOriginUrl(model);
-        redirectAttributes.addAttribute("originUrl", originUrl);
-
-        return "redirect:{originUrl}";
+        String originUrl = urlService.findOriginUrl(model);
+        return "redirect:" + originUrl;
     }
 }

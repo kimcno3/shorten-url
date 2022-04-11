@@ -2,7 +2,7 @@ package project.shortenurl.service;
 
 import org.springframework.ui.Model;
 
-public interface MainService {
+public interface UrlService {
     boolean isNotExist(String origin);
     Model create(Model model);
     void createShortenUrl(Model model);

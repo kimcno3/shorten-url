@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class MainRepositoryImpl implements MainRepository {
+public class HashMapUrlRepository implements UrlRepository {
 
     private final ConcurrentHashMap<Long, Model> database = new ConcurrentHashMap<>();
     private Long sequence = 0L;

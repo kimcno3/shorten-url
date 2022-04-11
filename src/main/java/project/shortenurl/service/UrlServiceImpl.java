@@ -1,17 +1,19 @@
 package project.shortenurl.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import project.shortenurl.repository.MainRepository;
+import project.shortenurl.repository.UrlRepository;
 import java.util.Locale;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class MainServiceImpl implements MainService {
+public class UrlServiceImpl implements UrlService {
 
-    private final MainRepository mainRepository;
+    private final UrlRepository urlRepository;
 
     /*
     * 코드설명
@@ -23,13 +25,13 @@ public class MainServiceImpl implements MainService {
 
     @Override
     public boolean isNotExist(String originUrl) {
-        return mainRepository.isSameUrl(originUrl);
+        return urlRepository.isSameUrl(originUrl);
     }
 
     @Override
    public Model create(Model model) {
         createShortenUrl(model);
-        return mainRepository.save(model);
+        return urlRepository.save(model);
     }
 
     @Override
@@ -46,11 +48,11 @@ public class MainServiceImpl implements MainService {
 
     @Override
     public String findOriginUrl(Model model) {
-        return mainRepository.findByShortenUrl(model);
+        return urlRepository.findByShortenUrl(model);
     }
 
     @Override
     public String findShortenUrl(Model model) {
-        return mainRepository.findByOriginUrl(model);
+        return urlRepository.findByOriginUrl(model);
     }
 }

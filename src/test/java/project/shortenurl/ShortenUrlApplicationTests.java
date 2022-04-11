@@ -4,11 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import project.shortenurl.controller.MainController;
-import project.shortenurl.repository.MainRepository;
-import project.shortenurl.service.MainService;
-
-import javax.annotation.PostConstruct;
+import project.shortenurl.controller.UrlController;
+import project.shortenurl.repository.UrlRepository;
+import project.shortenurl.service.UrlService;
 
 @SpringBootTest
 class ShortenUrlApplicationTests {
@@ -16,9 +14,9 @@ class ShortenUrlApplicationTests {
 
     @Test
     public void totalTest(){
-        MainController mainController = ac.getBean("mainController", MainController.class);
-        MainService mainService = ac.getBean("mainService", MainService.class);
-        MainRepository mainRepository = ac.getBean("mainRepository", MainRepository.class);
+        UrlController urlController = ac.getBean("mainController", UrlController.class);
+        UrlService urlService = ac.getBean("mainService", UrlService.class);
+        UrlRepository urlRepository = ac.getBean("mainRepository", UrlRepository.class);
 
 
     }
