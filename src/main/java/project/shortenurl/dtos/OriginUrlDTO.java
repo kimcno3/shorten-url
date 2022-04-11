@@ -1,4 +1,4 @@
-package project.shortenurl.domain;
+package project.shortenurl.dtos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

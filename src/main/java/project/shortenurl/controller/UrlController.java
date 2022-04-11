@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.shortenurl.domain.ErrorMessage;
-import project.shortenurl.domain.OriginUrlDTO;
-import project.shortenurl.domain.ShortenUrlDTO;
+import project.shortenurl.dtos.ErrorMessage;
+import project.shortenurl.dtos.OriginUrlDTO;
+import project.shortenurl.dtos.ShortenUrlDTO;
 import project.shortenurl.service.UrlService;
 
 @Slf4j

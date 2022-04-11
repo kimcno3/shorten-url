@@ -1,4 +1,4 @@
-package project.shortenurl.domain;
+package project.shortenurl.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter @Setter
 @AllArgsConstructor
-public class ErrorMessage {
+public class ShortenUrlDTO {
 
-    private String message;
+    private String shortenUrl;
 
 }
