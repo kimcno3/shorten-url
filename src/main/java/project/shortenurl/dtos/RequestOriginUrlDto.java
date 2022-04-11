@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class OriginUrlDto {
+public class RequestOriginUrlDto {
 
     private String originUrl;
 

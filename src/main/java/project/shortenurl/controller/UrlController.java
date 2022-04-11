@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.shortenurl.dtos.OriginUrlDto;
-import project.shortenurl.dtos.ShortenUrlDto;
+import project.shortenurl.dtos.RequestOriginUrlDto;
+import project.shortenurl.dtos.ResponseShortenUrlDto;
 import project.shortenurl.service.UrlService;
 
 @Slf4j
@@ -53,8 +53,8 @@ public class UrlController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity createShortenUrl(@RequestBody OriginUrlDto originUrlDto, Model model){
-        String originUrl = originUrlDto.getOriginUrl();
+    public ResponseEntity createShortenUrl(@RequestBody RequestOriginUrlDto requestOriginUrl, Model model){
+        String originUrl = requestOriginUrl.getOriginUrl();
         model.addAttribute("originUrl", originUrl);
 
         if(urlService.isExist(originUrl)){
@@ -63,13 +63,13 @@ public class UrlController {
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new ShortenUrlDto(basicUrl + model.getAttribute("shortenUrl")));
+                    .body(new ResponseShortenUrlDto(basicUrl + model.getAttribute("shortenUrl")));
         } else{
             String shortenUrl = basicUrl + urlService.findShortenUrl(model);
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ShortenUrlDto(shortenUrl));
+                    .body(new ResponseShortenUrlDto(shortenUrl));
         }
     }
 
