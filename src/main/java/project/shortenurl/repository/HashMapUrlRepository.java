@@ -32,7 +32,7 @@ public class HashMapUrlRepository implements UrlRepository {
     public Long save(Model model) {
 
         model.addAttribute("id", ++sequence);
-        model.addAttribute("accessCount", 0);
+        model.addAttribute("accessCount", 1);
 
         Long id = (Long) model.getAttribute("id");
         database.put(id, model);
@@ -54,6 +54,7 @@ public class HashMapUrlRepository implements UrlRepository {
             Object tempOriginUrl = tempModel.getAttribute("originUrl");
 
             if(requestOriginUrl.equals(tempOriginUrl)){
+                tempModel.addAttribute("accessCount", plusAccessCount(tempModel));
 
                 log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
                         tempModel.getAttribute("id"),
