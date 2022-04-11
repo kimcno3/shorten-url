@@ -29,13 +29,21 @@ public class HashMapUrlRepository implements UrlRepository {
     }
 
     @Override
-    public Model save(Model model) {
+    public Long save(Model model) {
 
         model.addAttribute("id", ++sequence);
         model.addAttribute("accessCount", 0);
 
-        Long currentId = (Long) model.getAttribute("id");
-        return database.put(currentId, model);
+        Long id = (Long) model.getAttribute("id");
+        database.put(id, model);
+
+        log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                model.getAttribute("id"),
+                model.getAttribute("originUrl"),
+                model.getAttribute("shortenUrl"),
+                model.getAttribute("accessCount"));
+
+        return id;
     }
 
     @Override

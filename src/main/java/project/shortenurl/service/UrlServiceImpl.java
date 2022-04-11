@@ -24,12 +24,12 @@ public class UrlServiceImpl implements UrlService {
     * */
 
     @Override
-    public boolean isNotExist(String originUrl) {
+    public boolean isExist(String originUrl) {
         return urlRepository.isSameUrl(originUrl);
     }
 
     @Override
-   public Model create(Model model) {
+   public Long save(Model model) {
         createShortenUrl(model);
         return urlRepository.save(model);
     }

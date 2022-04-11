@@ -54,13 +54,12 @@ public class UrlController {
     @PostMapping
     @ResponseBody
     public ResponseEntity createShortenUrl(@RequestBody OriginUrlDto originUrlDto, Model model){
-
         String originUrl = originUrlDto.getOriginUrl();
         model.addAttribute("originUrl", originUrl);
 
-        if(urlService.isNotExist(originUrl)){
+        if(urlService.isExist(originUrl)){
 
-            urlService.create(model);
+            urlService.save(model);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
