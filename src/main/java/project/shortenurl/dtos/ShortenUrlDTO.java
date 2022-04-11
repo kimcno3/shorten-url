@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @AllArgsConstructor
-public class ShortenUrlDTO {
+public class ShortenUrlDto {
 
     private String shortenUrl;
 
