@@ -11,8 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.shortenurl.dtos.ErrorMessage;
-import project.shortenurl.dtos.OriginUrlDTO;
-import project.shortenurl.dtos.ShortenUrlDTO;
+import project.shortenurl.dtos.OriginUrlDto;
+import project.shortenurl.dtos.ShortenUrlDto;
 import project.shortenurl.service.UrlService;
 
 @Slf4j
@@ -54,9 +54,9 @@ public class UrlController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createShortenUrl(@RequestBody OriginUrlDTO originUrlDTO, Model model){
+    public ResponseEntity createShortenUrl(@RequestBody OriginUrlDto originUrlDto, Model model){
 
-        String originUrl = originUrlDTO.getOriginUrl();
+        String originUrl = originUrlDto.getOriginUrl();
         model.addAttribute("originUrl", originUrl);
 
         if(urlService.isNotExist(originUrl)){
@@ -65,7 +65,7 @@ public class UrlController {
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new ShortenUrlDTO(basicUrl + model.getAttribute("shortenUrl")));
+                    .body(new ShortenUrlDto(basicUrl + model.getAttribute("shortenUrl")));
         } else{
             String shortenUrl = basicUrl + urlService.findShortenUrl(model);
 
