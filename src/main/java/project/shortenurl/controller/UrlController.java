@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.shortenurl.dtos.ErrorMessage;
 import project.shortenurl.dtos.OriginUrlDto;
 import project.shortenurl.dtos.ShortenUrlDto;
 import project.shortenurl.service.UrlService;
@@ -71,7 +70,7 @@ public class UrlController {
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorMessage("This URL is already having shorten Url : " + shortenUrl));
+                    .body(new ShortenUrlDto(shortenUrl));
         }
     }
 
