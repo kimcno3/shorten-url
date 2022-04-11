@@ -63,7 +63,7 @@ public class UrlController {
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new ResponseShortenUrlDto(basicUrl + model.getAttribute("shortenUrl")));
+                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(model))); // change
         } else{
             String shortenUrl = basicUrl + urlService.findShortenUrl(model);
 
