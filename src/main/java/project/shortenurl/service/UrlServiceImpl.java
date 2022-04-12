@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import project.shortenurl.domain.Url;
 import project.shortenurl.repository.UrlRepository;
 import java.util.Locale;
 
@@ -14,21 +15,23 @@ import java.util.Locale;
 public class UrlServiceImpl implements UrlService {
 
     private final UrlRepository urlRepository;
+    private Long sequence = 0L;
 
     @Override
-    public boolean isExist(String originUrl) {
-        return urlRepository.isSameUrl(originUrl);
+    public boolean isNotExist(String originUrl) {
+        return urlRepository.isNotExist(originUrl);
     }
 
     @Override
-   public Long save(Model model) {
-        createShortenUrl(model);
-        return urlRepository.save(model);
-    }
+   public Long save(String originUrl) {
+        Url url = Url.builder()
+                .id(++sequence)
+                .originUrl(originUrl)
+                .shortenUrl(makeRandomUrl())
+                .accessCount(1L)
+                .build();
 
-    @Override
-    public void createShortenUrl(Model model) {
-        model.addAttribute("shortenUrl", makeRandomUrl());
+        return urlRepository.save(url);
     }
 
     @Override
@@ -39,12 +42,17 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public String findOriginUrl(Model model) {
-        return urlRepository.findByShortenUrl(model);
+    public Url findOne(Long id){
+        return urlRepository.findById(id);
     }
 
     @Override
-    public String findShortenUrl(Model model) {
-        return urlRepository.findByOriginUrl(model);
+    public String findShortenUrl(String originUrl){
+        return urlRepository.findByOriginUrl(originUrl).getShortenUrl();
+    }
+
+    @Override
+    public String findOriginUrl(String shortenUrl){
+        return urlRepository.findByShortenUrl(shortenUrl).getOriginUrl();
     }
 }

@@ -1,12 +1,14 @@
 package project.shortenurl.repository;
 
 import org.springframework.ui.Model;
+import project.shortenurl.domain.Url;
 
 public interface UrlRepository {
 
-    boolean isSameUrl(String originUrl);
-    Long save(Model model);
-    String findByOriginUrl(Model model);
-    String findByShortenUrl(Model model);
-    int plusAccessCount(Model tempModel);
+    boolean isNotExist(String originUrl);
+    Long save(Url url);
+    Url findById(Long id);
+    Url findByOriginUrl(String originUrl);
+    Url findByShortenUrl(String shortenUrl);
+    Long plusAccessCount(Url url);
 }

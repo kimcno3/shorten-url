@@ -3,12 +3,10 @@ package project.shortenurl.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.shortenurl.dtos.RequestOriginUrlDto;
 import project.shortenurl.dtos.ResponseShortenUrlDto;
@@ -26,31 +24,27 @@ public class UrlController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity createShortenUrl(@RequestBody RequestOriginUrlDto requestOriginUrl, Model model){
+    public ResponseEntity createShortenUrl(@RequestBody RequestOriginUrlDto requestOriginUrl){
         String originUrl = requestOriginUrl.getOriginUrl();
-        model.addAttribute("originUrl", originUrl);
 
-        if(urlService.isExist(originUrl)){
+        if(urlService.isNotExist(originUrl)){
 
-            urlService.save(model);
+            Long id = urlService.save(originUrl);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(model)));
+                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findOne(id).getShortenUrl()));
         } else{
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(model)));
+                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(originUrl)));
         }
     }
 
     @GetMapping("/{shortenUrl}")
-    public String accessShortenUrl(@PathVariable String shortenUrl,
-                                   @NotNull Model model){
-
-        model.addAttribute("shortenUrl", shortenUrl);
-        String originUrl = urlService.findOriginUrl(model);
+    public String accessShortenUrl(@PathVariable String shortenUrl){
+        String originUrl = urlService.findOriginUrl(shortenUrl);
         return "redirect:" + originUrl;
     }
 }

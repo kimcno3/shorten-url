@@ -12,11 +12,11 @@ import javax.persistence.*;
 public class Url {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private Long AccessCount;
+    private Long accessCount;
 
     @Column
     private String originUrl;
@@ -25,8 +25,10 @@ public class Url {
     private String shortenUrl;
 
     @Builder
-    public Url(String originUrl, String shortenUrl){
+    public Url(Long id, String originUrl, String shortenUrl, Long accessCount){
+        this.id = id;
         this.originUrl = originUrl;
         this.shortenUrl = shortenUrl;
+        this.accessCount = accessCount;
     }
 }

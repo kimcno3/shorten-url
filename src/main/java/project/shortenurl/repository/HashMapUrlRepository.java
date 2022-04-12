@@ -3,7 +3,7 @@ package project.shortenurl.repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.ui.Model;
+import project.shortenurl.domain.Url;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -11,15 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class HashMapUrlRepository implements UrlRepository {
 
-    private final ConcurrentHashMap<Long, Model> database = new ConcurrentHashMap<>();
-    private Long sequence = 0L;
+    private final ConcurrentHashMap<Long, Url> database = new ConcurrentHashMap<>();
 
     @Override
-    public boolean isSameUrl(String originUrl) {
+    public boolean isNotExist(String originUrl) {
         if(database.size() == 0) return true;
 
-        for (Model tempModel: database.values()) {
-            String tempOriginUrl = (String) tempModel.getAttribute("originUrl");
+        for (Url tempUrl: database.values()) {
+            String tempOriginUrl =  tempUrl.getOriginUrl();
 
             if (tempOriginUrl.equals(originUrl)) {
                 return false;
@@ -29,71 +28,56 @@ public class HashMapUrlRepository implements UrlRepository {
     }
 
     @Override
-    public Long save(Model model) {
+    public Long save(Url url) {
+        Long currentId = url.getId();
+        database.put(currentId, url);
 
-        model.addAttribute("id", ++sequence);
-        model.addAttribute("accessCount", 1);
+        log.info("Find Url's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                url.getId(), url.getOriginUrl(), url.getShortenUrl(), url.getAccessCount());
 
-        Long id = (Long) model.getAttribute("id");
-        database.put(id, model);
-
-        log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
-                model.getAttribute("id"),
-                model.getAttribute("originUrl"),
-                model.getAttribute("shortenUrl"),
-                model.getAttribute("accessCount"));
-
-        return id;
+        return currentId;
     }
 
     @Override
-    public String findByOriginUrl(Model model){
-        Object requestOriginUrl = model.getAttribute("originUrl");
+    public Url findById(Long id){
+        Url findUrl = database.get(id);
+        return findUrl;
+    }
 
-        for (Model tempModel : database.values()) {
-            Object tempOriginUrl = tempModel.getAttribute("originUrl");
+    @Override
+    public Url findByOriginUrl(String originUrl){
 
-            if(requestOriginUrl.equals(tempOriginUrl)){
-                tempModel.addAttribute("accessCount", plusAccessCount(tempModel));
+        for (Url tempUrl : database.values()) {
+            if(originUrl.equals(tempUrl.getOriginUrl())){
 
-                log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
-                        tempModel.getAttribute("id"),
-                        tempModel.getAttribute("originUrl"),
-                        tempModel.getAttribute("shortenUrl"),
-                        tempModel.getAttribute("accessCount"));
+                log.info("Find Url's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                        tempUrl.getId(), tempUrl.getOriginUrl(), tempUrl.getShortenUrl(), tempUrl.getAccessCount()
+                );
 
-                return (String) tempModel.getAttribute("shortenUrl");
+                return tempUrl;
             }
         }
-        return null;
+        throw new NullPointerException("동일한 URL이 존재하지 않습니다.");
     }
 
     @Override
-    public String findByShortenUrl(Model model) {
+    public Url findByShortenUrl(String shortenUrl) {
 
-        Object requestShortUrl = model.getAttribute("shortenUrl");
+        for (Url tempUrl : database.values()) {
+            if(shortenUrl.equals(tempUrl.getShortenUrl())){
+                log.info("Find Url's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
+                        tempUrl.getId(), tempUrl.getOriginUrl(), tempUrl.getShortenUrl(), tempUrl.getAccessCount()
+                );
 
-        for (Model tempModel : database.values()) {
-            Object tempShortUrl = tempModel.getAttribute("shortenUrl");
-
-            if(requestShortUrl.equals(tempShortUrl)){
-                tempModel.addAttribute("accessCount", plusAccessCount(tempModel));
-
-                log.info("Find Model's info : id={}, originUrl={}, shortenUrl={}, accessCount={}",
-                        tempModel.getAttribute("id"),
-                        tempModel.getAttribute("originUrl"),
-                        tempModel.getAttribute("shortenUrl"),
-                        tempModel.getAttribute("accessCount"));
-
-                return (String) tempModel.getAttribute("originUrl");
+                return tempUrl;
             }
         }
-        return null;
+        throw new NullPointerException("동일한 URL이 존재하지 않습니다.");
     }
 
     @Override
-    public int plusAccessCount(Model tempModel){
-        return (int) tempModel.getAttribute("accessCount") + 1;
+    public Long plusAccessCount(Url url){
+        return url.getAccessCount() + 1;
     }
 }
 

@@ -1,12 +1,13 @@
 package project.shortenurl.service;
 
 import org.springframework.ui.Model;
+import project.shortenurl.domain.Url;
 
 public interface UrlService {
-    boolean isExist(String originUrl);
-    Long save(Model model);
-    void createShortenUrl(Model model);
+    boolean isNotExist(String originUrl);
+    Long save(String originUrl);
     String makeRandomUrl();
-    String findOriginUrl(Model model);
-    String findShortenUrl(Model model);
+    Url findOne(Long id);
+    String findOriginUrl(String shortenUrl);
+    String findShortenUrl(String originUrl);
 }
