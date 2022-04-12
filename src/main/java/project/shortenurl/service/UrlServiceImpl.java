@@ -28,7 +28,7 @@ public class UrlServiceImpl implements UrlService {
                 .id(++sequence)
                 .originUrl(originUrl)
                 .shortenUrl(makeRandomUrl())
-                .accessCount(1L)
+                .accessCount(0L)
                 .build();
 
         return urlRepository.save(url);
@@ -43,16 +43,22 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Url findOne(Long id){
-        return urlRepository.findById(id);
+        Url findUrl = urlRepository.findById(id);
+        findUrl.plusAccessCount(); // 내부 메소드로 접근횟수 Count
+        return findUrl;
     }
 
     @Override
     public String findShortenUrl(String originUrl){
-        return urlRepository.findByOriginUrl(originUrl).getShortenUrl();
+        Url findUrl = urlRepository.findByOriginUrl(originUrl);
+        findUrl.plusAccessCount(); // 내부 메소드로 접근횟수 Count
+        return findUrl.getShortenUrl();
     }
 
     @Override
     public String findOriginUrl(String shortenUrl){
-        return urlRepository.findByShortenUrl(shortenUrl).getOriginUrl();
+        Url findUrl = urlRepository.findByShortenUrl(shortenUrl);
+        findUrl.plusAccessCount(); // 내부 메소드로 접근횟수 Count
+        return findUrl.getOriginUrl();
     }
 }

@@ -31,4 +31,8 @@ public class Url {
         this.shortenUrl = shortenUrl;
         this.accessCount = accessCount;
     }
+
+    public void plusAccessCount(){
+        this.accessCount += 1L;
+    }
 }
