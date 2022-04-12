@@ -63,13 +63,12 @@ public class UrlController {
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(model))); // change
+                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(model)));
         } else{
-            String shortenUrl = basicUrl + urlService.findShortenUrl(model);
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseShortenUrlDto(shortenUrl));
+                    .body(new ResponseShortenUrlDto(basicUrl + urlService.findShortenUrl(model)));
         }
     }
 
