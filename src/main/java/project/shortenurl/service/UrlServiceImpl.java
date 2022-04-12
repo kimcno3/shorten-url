@@ -15,14 +15,6 @@ public class UrlServiceImpl implements UrlService {
 
     private final UrlRepository urlRepository;
 
-    /*
-    * 코드설명
-        * makeRandomUrl : RandomStringUtils 클래스를 활용해서 랜덤 문자열 생성, 소문자로 변경
-
-    * 개선 사항
-      * findOriginUrl : shorenUrl로 OriginUrl을 찾는데, id로 찾을 수 있는 방법은 없을지 고민해봐야 한다.
-    * */
-
     @Override
     public boolean isExist(String originUrl) {
         return urlRepository.isSameUrl(originUrl);
